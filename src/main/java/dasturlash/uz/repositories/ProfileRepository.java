@@ -31,15 +31,14 @@ public class ProfileRepository {
 
            var isAdded = jdbcTemplate.update(sql,preparedStatementSetter);
            return isAdded != 0;
-
 //            var isSaved = jdbcTemplate.update(sql,profileDTO.getName(),profileDTO.getSurname(),profileDTO.getPassword(),profileDTO.getPhone(),
 //                profileDTO.getRole(),profileDTO.getStatus(),profileDTO.getCreatedAt(),profileDTO.getVisible());
 //          return isSaved != 0;
 
     }
-    public ProfileDTO getProfileById(Integer id) {
-        String sql = "select * from profile where id = ?";
-        List<ProfileDTO> profile = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(ProfileDTO.class),id);
+    public ProfileDTO getProfileByPhone(String phone) {
+        String sql = "select * from profile where phone = ?";
+        List<ProfileDTO> profile = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(ProfileDTO.class),phone);
         if(profile.isEmpty()) {
             return null;
         }

@@ -10,7 +10,7 @@ public class ScannerService {
     private Scanner scannerForDigit;
 
 
-    public ScannerService(Scanner scannerForStr, Scanner scannerForDigit) {
+    public ScannerService() {
         this.scannerForStr = new Scanner(System.in);
         this.scannerForDigit = new Scanner(System.in);
     }
@@ -21,8 +21,5 @@ public class ScannerService {
 
     public Scanner getScannerForDigit() {
         return scannerForDigit;
-    }
-
-    public ScannerService() {
     }
 }

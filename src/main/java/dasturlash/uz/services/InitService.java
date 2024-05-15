@@ -14,21 +14,21 @@ import java.time.LocalDateTime;
 public class InitService {
     @Autowired
     private ProfileRepository profileRepository;
-    private String admin = "admin";
+    private String phone = "+998887122829";
     public void initAdmin() {
-//        ProfileDTO profileDTO = profileRepository.getProfileById();
+        ProfileDTO profileDTO = profileRepository.getProfileByPhone(phone);
+        if(profileDTO == null) {
+            ProfileDTO profile = new ProfileDTO();
+            profile.setName("Siddiqjon");
+            profile.setSurname("Numonjonov");
+            profile.setPassword(MD5Util.encode("12345"));
+            profile.setCreatedAt(LocalDateTime.now());
+            profile.setRole(ProfileRole.ADMIN);
+            profile.setStatus(ProfileStatus.ACTIVE);
+            profile.setVisible(true);
+            profile.setPhone("+998887122829");
 
-        ProfileDTO profile = new ProfileDTO();
-        profile.setName("Siddiqjon");
-        profile.setSurname("Numonjonov");
-        profile.setPassword("12345");
-        profile.setPassword(MD5Util.encode("12345"));
-        profile.setCreatedAt(LocalDateTime.now());
-        profile.setRole(ProfileRole.ADMIN);
-        profile.setStatus(ProfileStatus.ACTIVE);
-        profile.setVisible(true);
-        profile.setPhone("+998887122829");
-
-        profileRepository.create(profile);
+            profileRepository.create(profile);
+        }
     }
 }

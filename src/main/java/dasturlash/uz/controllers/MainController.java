@@ -1,6 +1,7 @@
 package dasturlash.uz.controllers;
 
 import dasturlash.uz.repositories.TableRepository;
+import dasturlash.uz.services.AuthService;
 import dasturlash.uz.services.InitService;
 import dasturlash.uz.services.ScannerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class MainController {
     private TableRepository tableRepository;
     @Autowired
     private InitService initService;
+    @Autowired
+    private AuthService authService;
     public void start() {
         tableRepository.createTables();
         initService.initAdmin();
@@ -26,6 +29,7 @@ public class MainController {
 
             switch (action) {
                 case 1:
+                    login();
                     break;
                 case 2:
                     break;
@@ -42,6 +46,22 @@ public class MainController {
         }
 
     }
+
+    private void login() {
+        System.out.println("enter phone : ");
+        String phone = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter password : ");
+        String password = scannerService.getScannerForStr().nextLine();
+
+
+       var isLogged = authService.login(phone,password);
+       if(!isLogged) {
+           System.out.println("phone or password wrong !!!");
+           System.exit(-1);
+       }
+    }
+
     public void printMenu() {
         System.out.println("***Main Menu ***");
         System.out.println("1=>Login");
@@ -51,9 +71,7 @@ public class MainController {
         System.out.print("enter action : ");
     }
     public int getAction() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
-//        return scannerService.getScannerForDigit().nextInt();
+        return scannerService.getScannerForDigit().nextInt();
     }
 
 }
