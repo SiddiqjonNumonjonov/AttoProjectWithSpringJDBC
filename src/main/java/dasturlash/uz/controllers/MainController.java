@@ -1,9 +1,12 @@
 package dasturlash.uz.controllers;
 
+import dasturlash.uz.containers.ComponentContainer;
+import dasturlash.uz.dtos.ProfileDTO;
 import dasturlash.uz.repositories.TableRepository;
 import dasturlash.uz.services.AuthService;
 import dasturlash.uz.services.InitService;
 import dasturlash.uz.services.ScannerService;
+import dasturlash.uz.utills.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -19,19 +22,22 @@ public class MainController {
     private InitService initService;
     @Autowired
     private AuthService authService;
+    @Autowired
+    ComponentContainer componentContainer;
     public void start() {
         tableRepository.createTables();
         initService.initAdmin();
         boolean loop = true;
         while (loop) {
             printMenu();
-            int action = getAction();
+            int action = componentContainer.getAction();
 
             switch (action) {
                 case 1:
                     login();
                     break;
                 case 2:
+                    registration();
                     break;
                 case 3:
                     break;
@@ -45,6 +51,34 @@ public class MainController {
             }
         }
 
+    }
+
+    private void registration() {
+        System.out.println("enter name :");
+        String name = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter surname : ");
+        String surname = scannerService.getScannerForStr().nextLine();
+
+
+        System.out.println("enter phone : ");
+        String phone = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter password : ");
+        String password = scannerService.getScannerForStr().nextLine();
+
+        ProfileDTO profileDTO = new ProfileDTO();
+        profileDTO.setName(name);
+        profileDTO.setSurname(surname);
+        profileDTO.setPassword(MD5Util.encode(password));
+        profileDTO.setPhone(phone);
+
+        var isAdded = authService.add(profileDTO);
+        if(isAdded) {
+            System.out.println("added successfully");
+        }else {
+            System.err.println("something went wrong !!!");
+        }
     }
 
     private void login() {
@@ -69,9 +103,6 @@ public class MainController {
         System.out.println("3=>Make payment");
         System.out.println("0=> exit");
         System.out.print("enter action : ");
-    }
-    public int getAction() {
-        return scannerService.getScannerForDigit().nextInt();
     }
 
 }

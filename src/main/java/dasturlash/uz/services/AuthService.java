@@ -6,8 +6,11 @@ import dasturlash.uz.enums.ProfileRole;
 import dasturlash.uz.enums.ProfileStatus;
 import dasturlash.uz.repositories.ProfileRepository;
 import dasturlash.uz.utills.MD5Util;
+import dasturlash.uz.utills.ProfileValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class AuthService {
@@ -30,11 +33,33 @@ public class AuthService {
             return false;
         }
 
+        if(!profileDTO.getVisible()) {
+            return false;
+        }
+
         if(profileDTO.getRole().equals(ProfileRole.ADMIN)) {
             adminController.start();
         } else if (profileDTO.getRole().equals(ProfileRole.USER)) {
             System.out.println("user menu");
         }
         return true;
+    }
+
+    public Boolean add(ProfileDTO profileDTO) {
+        ProfileDTO profile = profileRepository.getProfileByPhone(profileDTO.getPhone());
+        if(profile != null) {
+            return false;
+        }
+
+        if(!ProfileValidationUtil.isValidate(profileDTO)) {
+            return false;
+        }
+        profileDTO.setVisible(true);
+        profileDTO.setStatus(ProfileStatus.ACTIVE);
+        profileDTO.setRole(ProfileRole.USER);
+        profileDTO.setCreatedAt(LocalDateTime.now());
+
+        return profileRepository.create(profileDTO);
+
     }
 }
