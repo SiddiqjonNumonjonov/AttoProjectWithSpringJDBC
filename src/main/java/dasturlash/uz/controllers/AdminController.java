@@ -1,9 +1,13 @@
 package dasturlash.uz.controllers;
 
 import dasturlash.uz.containers.ComponentContainer;
+import dasturlash.uz.dtos.CardDTO;
+import dasturlash.uz.services.CardService;
 import dasturlash.uz.services.ScannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import java.util.Date;
 
 @Controller
 public class AdminController {
@@ -11,6 +15,8 @@ public class AdminController {
     private ScannerService scannerService;
     @Autowired
     private ComponentContainer componentContainer;
+    @Autowired
+    private CardService cardService;
     public void start() {
         boolean loop = true;
         while (loop) {
@@ -18,8 +24,10 @@ public class AdminController {
             int command = componentContainer.getAction();
             switch (command) {
                 case 1:
+                    createCard();
                     break;
                 case 2:
+                    cardLists();
                     break;
                 case 3:
                     break;
@@ -59,6 +67,33 @@ public class AdminController {
         }
 
     }
+
+    private void cardLists() {
+        var lists = cardService.cardLists();
+        if(lists == null) {
+            System.err.println("no card");
+        }else {
+            for (CardDTO cardDTO : lists) {
+                System.out.println(cardDTO);
+            }
+        }
+    }
+
+    private void createCard() {
+        System.out.println("enter number : ");
+        String cardNumber = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter expired date (yyy-mm-dd)");
+        String date = scannerService.getScannerForStr().nextLine();
+
+       var isAdded = cardService.addCard(cardNumber,date);
+       if(isAdded) {
+           System.out.println("added successfully");
+       }else {
+           System.out.println("something went wrong !!!");
+       }
+    }
+
     public void printMenu() {
         System.out.println("***Admin Menu***");
         System.out.println("1=>Create card");

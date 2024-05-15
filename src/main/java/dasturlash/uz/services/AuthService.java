@@ -1,9 +1,10 @@
 package dasturlash.uz.services;
 
 import dasturlash.uz.controllers.AdminController;
+import dasturlash.uz.controllers.UserController;
 import dasturlash.uz.dtos.ProfileDTO;
+import dasturlash.uz.enums.GeneralStatus;
 import dasturlash.uz.enums.ProfileRole;
-import dasturlash.uz.enums.ProfileStatus;
 import dasturlash.uz.repositories.ProfileRepository;
 import dasturlash.uz.utills.MD5Util;
 import dasturlash.uz.utills.ProfileValidationUtil;
@@ -18,6 +19,8 @@ public class AuthService {
     private ProfileRepository profileRepository;
     @Autowired
     private AdminController adminController;
+    @Autowired
+    private UserController userController;
     public Boolean login(String phone, String password) {
         ProfileDTO profileDTO = profileRepository.getProfileByPhone(phone);
 
@@ -28,7 +31,7 @@ public class AuthService {
             return false;
         }
 
-        if(!profileDTO.getStatus().equals(ProfileStatus.ACTIVE)) {
+        if(!profileDTO.getStatus().equals(GeneralStatus.ACTIVE)) {
             System.out.println("Profile is Blocked");
             return false;
         }
@@ -40,7 +43,7 @@ public class AuthService {
         if(profileDTO.getRole().equals(ProfileRole.ADMIN)) {
             adminController.start();
         } else if (profileDTO.getRole().equals(ProfileRole.USER)) {
-            System.out.println("user menu");
+           userController.start();
         }
         return true;
     }
@@ -55,7 +58,7 @@ public class AuthService {
             return false;
         }
         profileDTO.setVisible(true);
-        profileDTO.setStatus(ProfileStatus.ACTIVE);
+        profileDTO.setStatus(GeneralStatus.ACTIVE);
         profileDTO.setRole(ProfileRole.USER);
         profileDTO.setCreatedAt(LocalDateTime.now());
 

@@ -1,7 +1,7 @@
 package dasturlash.uz.dtos;
 
+import dasturlash.uz.enums.GeneralStatus;
 import dasturlash.uz.enums.ProfileRole;
-import dasturlash.uz.enums.ProfileStatus;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +13,7 @@ public class ProfileDTO {
     private String password;
     private Boolean visible;
     private ProfileRole role;
-    private ProfileStatus status;
+    private GeneralStatus status;
     private LocalDateTime createdAt;
 
     public int getId() {
@@ -80,11 +80,11 @@ public class ProfileDTO {
         this.role = role;
     }
 
-    public ProfileStatus getStatus() {
+    public GeneralStatus getStatus() {
         return status;
     }
 
-    public void setStatus(ProfileStatus status) {
+    public void setStatus(GeneralStatus status) {
         this.status = status;
     }
 }

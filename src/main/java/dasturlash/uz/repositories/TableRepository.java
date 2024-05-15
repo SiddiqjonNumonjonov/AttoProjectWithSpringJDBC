@@ -21,6 +21,18 @@ public class TableRepository {
                 "role varchar(25) not null" +
                 ")";
 
+
+        String sqlForCard = "create table if not exists card(" +
+                "id serial primary key," +
+                "cardNumber varchar(16) unique not null," +
+                "expired_date date not null," +
+                "balance numeric not null," +
+                "status varchar(20) not null," +
+                "visible boolean default true," +
+                "created_at timeStamp default now()" +
+                ")";
+
         jdbcTemplate.execute(sqlForProfile);
+        jdbcTemplate.execute(sqlForCard);
     }
 }
