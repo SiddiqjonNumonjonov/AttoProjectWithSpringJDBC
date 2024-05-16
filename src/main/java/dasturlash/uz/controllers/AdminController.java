@@ -2,8 +2,11 @@ package dasturlash.uz.controllers;
 
 import dasturlash.uz.containers.ComponentContainer;
 import dasturlash.uz.dtos.CardDTO;
+import dasturlash.uz.dtos.TerminalDTO;
 import dasturlash.uz.services.CardService;
 import dasturlash.uz.services.ScannerService;
+import dasturlash.uz.services.TerminalService;
+import dasturlash.uz.utills.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -17,6 +20,8 @@ public class AdminController {
     private ComponentContainer componentContainer;
     @Autowired
     private CardService cardService;
+    @Autowired
+    private TerminalService terminalService;
     public void start() {
         boolean loop = true;
         while (loop) {
@@ -39,14 +44,19 @@ public class AdminController {
                     deleteCard();
                     break;
                 case 6:
+                    createTerminal();
                     break;
                 case 7:
+                    terminalLists();
                     break;
                 case 8:
+                    updateTerminal();
                     break;
                 case 9:
+                    changeStatusTerminal();
                     break;
                 case 10:
+                    deleteTerminal();
                     break;
                 case 11:
                     break;
@@ -71,6 +81,74 @@ public class AdminController {
 
     }
 
+    private void deleteTerminal() {
+        System.out.println("enter code : ");
+        String code = scannerService.getScannerForStr().nextLine();
+
+       var isDeleted =  terminalService.delete(code);
+       if(isDeleted) {
+           System.out.println("deleted successfully");
+       }else {
+           System.out.println("something went wrong !!!!");
+       }
+    }
+
+    private void changeStatusTerminal() {
+        System.out.println("enter code : ");
+        String code = scannerService.getScannerForStr().nextLine();
+
+        var isChanged = terminalService.changStatus(code);
+        if(isChanged) {
+            System.out.println("changed successfully");
+        }else {
+            System.err.println("something went wrong !!!");
+        }
+    }
+
+    private void updateTerminal() {
+        System.out.println("enter code : ");
+        String code = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter new address : ");
+        String address = scannerService.getScannerForStr().nextLine();
+
+        var isUpdated = terminalService.update(code,address);
+        if(isUpdated) {
+            System.out.println("updated successfully");
+        }else {
+            System.err.println("something went wrong !!!!");
+        }
+    }
+
+    private void terminalLists() {
+       var terminalLists =  terminalService.terminalLists();
+       if(terminalLists == null) {
+           System.out.println("no terminal");
+       }else {
+           for (TerminalDTO terminalDTO : terminalLists) {
+               System.out.println(terminalDTO.getId()+"  "+terminalDTO.getCode()+" "+terminalDTO.getAddress()+" "+
+                       terminalDTO.getStatus()+" "+terminalDTO.getCreatedAt());
+           }
+       }
+    }
+
+    private void createTerminal() {
+        System.out.println("enter code : ");
+        String code = scannerService.getScannerForDigit().next();
+
+        System.out.println("enter address : ");
+        String address = scannerService.getScannerForStr().nextLine();
+
+       var isCreated = terminalService.create(code,address);
+       if (isCreated) {
+           System.out.println("created successfully");
+       }else {
+           System.err.println("something went wrong !!!");
+       }
+
+
+    }
+
     private void deleteCard() {
         System.out.println("enter card number : ");
         String cardNumber = scannerService.getScannerForStr().nextLine();
@@ -78,7 +156,7 @@ public class AdminController {
        if(isDeleted) {
            System.out.println("deleted successfully");
        }else {
-           System.out.println("something went wrong !!!!");
+           System.err.println("something went wrong !!!!");
        }
     }
 
@@ -91,7 +169,7 @@ public class AdminController {
        if(isChanged) {
            System.out.println("Status changed successfully");
        }else{
-           System.out.println("something went wrong !!!");
+           System.err.println("something went wrong !!!");
        }
     }
 
@@ -106,7 +184,7 @@ public class AdminController {
         if(isUpdated) {
             System.out.println("updated successfully");
         }else {
-            System.out.println("something went wrong !!!");
+            System.err.println("something went wrong !!!");
         }
     }
 
@@ -116,7 +194,8 @@ public class AdminController {
             System.err.println("no card");
         }else {
             for (CardDTO cardDTO : lists) {
-                System.out.println(cardDTO.getId() + " "+cardDTO.getCardNumber() +" "+cardDTO.getBalance()+ " "+cardDTO.getExpiredDate()+ " "+ cardDTO.getCreatedAt());
+                System.out.println(cardDTO.getId() + " "+cardDTO.getCardNumber() +" "+cardDTO.getBalance()+ " "+
+                        cardDTO.getExpiredDate()+ " "+ DateUtil.toSimpleFormat(cardDTO.getCreatedAt()));
             }
         }
     }

@@ -63,14 +63,6 @@ public class CardService {
         return true;
     }
 
-    public List<CardDTO> cardLists() {
-       var lists = cardRepository.cardLists();
-       if(lists.isEmpty()) {
-           return null;
-       }
-       return lists;
-    }
-
     public List<CardDTO> formattedLists() {
         List<CardDTO> formattedList = new ArrayList<>();
         var lists = cardRepository.cardLists();
@@ -85,7 +77,7 @@ public class CardService {
             card.setId(cardDTO.getId());
             card.setExpiredDate(DateUtil.toDateAndYearString(LocalDate.parse(cardDTO.getExpiredDate())));
             card.setCardNumber(CardUtil.replaceWithStar(cardDTO.getCardNumber()));
-            card.setCreatedAt(LocalDateTime.parse(DateUtil.toSimpleFormat(cardDTO.getCreatedAt())));
+            card.setCreatedAt(cardDTO.getCreatedAt());
             formattedList.add(card);
         }
         return formattedList;

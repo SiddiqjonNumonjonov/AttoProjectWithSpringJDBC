@@ -32,7 +32,17 @@ public class TableRepository {
                 "created_at timeStamp default now()" +
                 ")";
 
+        String sqlForTerminal = "create table if not exists terminal(" +
+                "id serial primary key," +
+                "code varchar unique not null," +
+                "address varchar(25)," +
+                "status varchar(25)," +
+                "visible boolean not null," +
+                "created_at timeStamp default now()" +
+                ")";
+
         jdbcTemplate.execute(sqlForProfile);
         jdbcTemplate.execute(sqlForCard);
+        jdbcTemplate.execute(sqlForTerminal);
     }
 }
