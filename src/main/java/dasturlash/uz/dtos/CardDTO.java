@@ -9,7 +9,7 @@ import java.util.Date;
 public class CardDTO {
     private Integer id;
     private String cardNumber;
-    private LocalDate expiredDate;
+    private String expiredDate;
     private LocalDateTime createdAt;
     private Double balance;
     private Boolean visible;
@@ -63,11 +63,11 @@ public class CardDTO {
         this.status = status;
     }
 
-    public LocalDate getExpiredDate() {
+    public String getExpiredDate() {
         return expiredDate;
     }
 
-    public void setExpiredDate(LocalDate expiredDate) {
+    public void setExpiredDate(String expiredDate) {
         this.expiredDate = expiredDate;
     }
 

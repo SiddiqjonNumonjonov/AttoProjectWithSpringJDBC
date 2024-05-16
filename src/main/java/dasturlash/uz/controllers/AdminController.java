@@ -30,10 +30,13 @@ public class AdminController {
                     cardLists();
                     break;
                 case 3:
+                    update();
                     break;
                 case 4:
+                    changeCardStatus();
                     break;
                 case 5:
+                    deleteCard();
                     break;
                 case 6:
                     break;
@@ -68,13 +71,52 @@ public class AdminController {
 
     }
 
+    private void deleteCard() {
+        System.out.println("enter card number : ");
+        String cardNumber = scannerService.getScannerForStr().nextLine();
+       var isDeleted =  cardService.deleteCard(cardNumber);
+       if(isDeleted) {
+           System.out.println("deleted successfully");
+       }else {
+           System.out.println("something went wrong !!!!");
+       }
+    }
+
+    private void changeCardStatus() {
+
+        System.out.println("enter card number : ");
+        String cardNumber = scannerService.getScannerForStr().nextLine();
+
+       var isChanged = cardService.changeStatus(cardNumber);
+       if(isChanged) {
+           System.out.println("Status changed successfully");
+       }else{
+           System.out.println("something went wrong !!!");
+       }
+    }
+
+    private void update() {
+        System.out.println("enter card number : ");
+        String cardNumber = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter new expired date : ");
+        String expiredDate = scannerService.getScannerForStr().nextLine();
+
+        var isUpdated = cardService.update(cardNumber,expiredDate);
+        if(isUpdated) {
+            System.out.println("updated successfully");
+        }else {
+            System.out.println("something went wrong !!!");
+        }
+    }
+
     private void cardLists() {
-        var lists = cardService.cardLists();
+        var lists = cardService.formattedLists();
         if(lists == null) {
             System.err.println("no card");
         }else {
             for (CardDTO cardDTO : lists) {
-                System.out.println(cardDTO);
+                System.out.println(cardDTO.getId() + " "+cardDTO.getCardNumber() +" "+cardDTO.getBalance()+ " "+cardDTO.getExpiredDate()+ " "+ cardDTO.getCreatedAt());
             }
         }
     }
@@ -115,7 +157,7 @@ public class AdminController {
         System.out.println("17=>transaction by card");
         System.out.println("18=>Profile lists");
         System.out.println("19=>change profile status");
-        System.out.print("choose one of them : ");
+
 
     }
 }

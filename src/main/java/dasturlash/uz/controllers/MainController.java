@@ -56,14 +56,10 @@ public class MainController {
     private void registration() {
         System.out.println("enter name :");
         String name = scannerService.getScannerForStr().nextLine();
-
         System.out.println("enter surname : ");
         String surname = scannerService.getScannerForStr().nextLine();
-
-
         System.out.println("enter phone : ");
         String phone = scannerService.getScannerForStr().nextLine();
-
         System.out.println("enter password : ");
         String password = scannerService.getScannerForStr().nextLine();
 
@@ -102,7 +98,6 @@ public class MainController {
         System.out.println("2=>Registration");
         System.out.println("3=>Make payment");
         System.out.println("0=> exit");
-        System.out.print("enter action : ");
     }
 
 }

@@ -1,14 +1,17 @@
 package dasturlash.uz.repositories;
 
 import dasturlash.uz.dtos.CardDTO;
+import dasturlash.uz.enums.GeneralStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -44,5 +47,24 @@ public class CardRepository {
     public List<CardDTO> cardLists() {
         String sql = "select * from card where visible = true";
         return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(CardDTO.class));
+    }
+
+    public Boolean update(String cardNumber, LocalDate expiredDate) {
+
+        String sql = "update card set expired_date = ? where cardNumber = ?";
+        var isUpdated = jdbcTemplate.update(sql,expiredDate,cardNumber);
+        return isUpdated != 0;
+    }
+
+    public Boolean changeStatus(String cardNumber, GeneralStatus generalStatus) {
+        String sql = "update card set status = ? where cardNumber = ?";
+        var isUpdated = jdbcTemplate.update(sql,generalStatus.name(),cardNumber);
+        return isUpdated != 0;
+    }
+
+    public Boolean delete(String cardNumber) {
+        String sql = "update card set visible = false where cardNumber = ?";
+        var isUpdated = jdbcTemplate.update(sql,cardNumber);
+        return isUpdated != 0;
     }
 }

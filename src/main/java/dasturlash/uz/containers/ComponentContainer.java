@@ -13,9 +13,11 @@ public class ComponentContainer {
     public Integer getAction() {
         while (true) {
             try{
+                System.out.print("choose one of them : ");
+                scannerService = new ScannerService();
                 return scannerService.getScannerForDigit().nextInt();
-            }catch (InputMismatchException exception) {
-                System.out.println("Wrong input");
+            }catch (InputMismatchException e) {
+                System.err.println("incorrect input");
             }
         }
     }
