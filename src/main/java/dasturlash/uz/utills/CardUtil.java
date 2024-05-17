@@ -12,4 +12,18 @@ public class CardUtil {
         return prefix + middle + suffix;
     }
 
+    public static Boolean isValidate(String cardNumber) {
+        char [] cardNumbers = cardNumber.toCharArray();
+        if(cardNumbers.length != 16) {
+            return false;
+        }
+
+        for (Character character : cardNumbers){
+            if(!Character.isDigit(character)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

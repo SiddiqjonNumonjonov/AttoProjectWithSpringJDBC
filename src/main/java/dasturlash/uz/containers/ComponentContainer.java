@@ -1,5 +1,6 @@
 package dasturlash.uz.containers;
 
+import dasturlash.uz.dtos.ProfileDTO;
 import dasturlash.uz.services.ScannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,4 +22,5 @@ public class ComponentContainer {
             }
         }
     }
+        public  ProfileDTO currentProfile;
 }

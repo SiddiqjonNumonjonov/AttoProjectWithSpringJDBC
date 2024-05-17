@@ -29,7 +29,7 @@ public class CardService {
 
         LocalDate localDate = getExpiredDate(expiredDate);
 
-        if(localDate == null && !isValidate(cardNumber)) {
+        if(localDate == null && !CardUtil.isValidate(cardNumber)) {
             return false;
         }
 
@@ -48,19 +48,6 @@ public class CardService {
         int month = Integer.parseInt(strings[0]);
         int year = Integer.parseInt("20" + strings[1]);
        return LocalDate.of(year,month,1);
-    }
-    public Boolean isValidate(String cardNumber) {
-        char [] cardNumbers = cardNumber.toCharArray();
-        if(cardNumbers.length != 16) {
-            return false;
-        }
-
-        for (Character character : cardNumbers){
-            if(!Character.isDigit(character)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public List<CardDTO> formattedLists() {
@@ -94,7 +81,7 @@ public class CardService {
 
     public Boolean changeStatus(String cardNumber) {
 
-        if(!isValidate(cardNumber)) {
+        if(!CardUtil.isValidate(cardNumber)) {
             return false;
         }
         CardDTO cardDTO = cardRepository.getCardByCardNumber(cardNumber);

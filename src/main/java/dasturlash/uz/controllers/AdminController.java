@@ -76,6 +76,9 @@ public class AdminController {
                     break;
                 case 19:
                     break;
+                case 0:
+                    loop = false;
+                    break;
             }
         }
 

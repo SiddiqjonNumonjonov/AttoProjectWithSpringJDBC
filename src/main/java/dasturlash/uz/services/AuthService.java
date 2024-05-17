@@ -1,5 +1,6 @@
 package dasturlash.uz.services;
 
+import dasturlash.uz.containers.ComponentContainer;
 import dasturlash.uz.controllers.AdminController;
 import dasturlash.uz.controllers.UserController;
 import dasturlash.uz.dtos.ProfileDTO;
@@ -21,6 +22,8 @@ public class AuthService {
     private AdminController adminController;
     @Autowired
     private UserController userController;
+    @Autowired
+    private ComponentContainer componentContainer;
     public Boolean login(String phone, String password) {
         ProfileDTO profileDTO = profileRepository.getProfileByPhone(phone);
 
@@ -40,6 +43,7 @@ public class AuthService {
             return false;
         }
 
+        componentContainer.currentProfile = profileDTO;
         if(profileDTO.getRole().equals(ProfileRole.ADMIN)) {
             adminController.start();
         } else if (profileDTO.getRole().equals(ProfileRole.USER)) {
@@ -57,6 +61,9 @@ public class AuthService {
         if(!ProfileValidationUtil.isValidate(profileDTO)) {
             return false;
         }
+
+
+
         profileDTO.setVisible(true);
         profileDTO.setStatus(GeneralStatus.ACTIVE);
         profileDTO.setRole(ProfileRole.USER);

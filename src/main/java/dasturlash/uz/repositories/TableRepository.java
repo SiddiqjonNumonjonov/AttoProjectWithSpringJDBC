@@ -41,8 +41,21 @@ public class TableRepository {
                 "created_at timeStamp default now()" +
                 ")";
 
+//        id,cardId,profileId,visible,created_date
+
+        String sqlForProfileCard = "create table if not exists  profileCard(" +
+                "id serial primary key," +
+                "card_id int unique not null," +
+                "profile_id int not null," +
+                "visible boolean default true," +
+                "created_at timeStamp default now()," +
+                "constraint fk_card foreign key (card_id) references card(id), " +
+                " constraint fk_profile foreign key (profile_id) references profile(id) " +
+                ")";
+
         jdbcTemplate.execute(sqlForProfile);
         jdbcTemplate.execute(sqlForCard);
         jdbcTemplate.execute(sqlForTerminal);
+        jdbcTemplate.execute(sqlForProfileCard);
     }
 }
