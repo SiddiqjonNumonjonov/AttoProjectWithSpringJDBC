@@ -70,6 +70,10 @@ public class CardDTO {
     public void setExpiredDate(String expiredDate) {
         this.expiredDate = expiredDate;
     }
+    public Double subtract(Double balance) {
+        this.balance = this.getBalance() - balance;
+        return this.balance;
+    }
 
     @Override
     public String toString() {

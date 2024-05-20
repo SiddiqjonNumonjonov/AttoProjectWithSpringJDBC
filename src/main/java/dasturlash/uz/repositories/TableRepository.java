@@ -53,9 +53,21 @@ public class TableRepository {
                 " constraint fk_profile foreign key (profile_id) references profile(id) " +
                 ")";
 
+        String sqlForTransaction = "create table if not exists  transactions(" +
+                "id  serial primary key," +
+                "card_id int not null," +
+                "amount numeric(12,2)," +
+                "terminal_id int," +
+                "types varchar(20) not null," +
+                "created_at timeStamp not null," +
+                "foreign key(card_id) references card(id)," +
+                "foreign key(terminal_id) references terminal(id)" +
+                ")";
+
         jdbcTemplate.execute(sqlForProfile);
         jdbcTemplate.execute(sqlForCard);
         jdbcTemplate.execute(sqlForTerminal);
         jdbcTemplate.execute(sqlForProfileCard);
+        jdbcTemplate.execute(sqlForTransaction);
     }
 }

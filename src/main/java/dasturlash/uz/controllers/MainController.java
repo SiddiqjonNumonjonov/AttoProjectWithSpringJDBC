@@ -2,10 +2,12 @@ package dasturlash.uz.controllers;
 
 import dasturlash.uz.containers.ComponentContainer;
 import dasturlash.uz.dtos.ProfileDTO;
+import dasturlash.uz.dtos.TransactionDTO;
 import dasturlash.uz.repositories.TableRepository;
 import dasturlash.uz.services.AuthService;
 import dasturlash.uz.services.InitService;
 import dasturlash.uz.services.ScannerService;
+import dasturlash.uz.services.TransactionService;
 import dasturlash.uz.utills.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,10 @@ public class MainController {
     @Autowired
     private AuthService authService;
     @Autowired
-    ComponentContainer componentContainer;
+    private ComponentContainer componentContainer;
+    @Autowired
+    private TransactionService transactionService;
+
     public void start() {
         tableRepository.createTables();
         initService.initAdmin();
@@ -40,6 +45,7 @@ public class MainController {
                     registration();
                     break;
                 case 3:
+                    makePayment();
                     break;
                 case 0:
                     loop = false;
@@ -51,6 +57,21 @@ public class MainController {
             }
         }
 
+    }
+
+    private void makePayment() {
+        System.out.println("enter card number : ");
+        String cardNumber = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter terminal code  : ");
+        String code = scannerService.getScannerForStr().nextLine();
+
+       var isMadePayment = transactionService.makePayment(cardNumber,code);
+       if(isMadePayment) {
+           System.out.println("transaction is completed successfully");
+       }else{
+           System.out.println("something went wrong !!!");
+       }
     }
 
     private void registration() {

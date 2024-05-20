@@ -22,5 +22,5 @@ public class ComponentContainer {
             }
         }
     }
-        public  ProfileDTO currentProfile;
+        public ProfileDTO currentProfile;
 }

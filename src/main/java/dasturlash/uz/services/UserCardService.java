@@ -5,6 +5,7 @@ import dasturlash.uz.dtos.CardDTO;
 import dasturlash.uz.dtos.ProfileCard;
 import dasturlash.uz.dtos.ProfileDTO;
 import dasturlash.uz.enums.GeneralStatus;
+import dasturlash.uz.enums.TransactionType;
 import dasturlash.uz.repositories.CardRepository;
 import dasturlash.uz.repositories.ProfileRepository;
 import dasturlash.uz.repositories.UserCardRepository;
@@ -25,6 +26,8 @@ public class UserCardService {
     private ProfileRepository profileRepository;
     @Autowired
     private UserCardRepository userCardRepository;
+    @Autowired
+    private TransactionService transactionService;
 
     public Boolean addToCard(String cardNumber) {
         if (!CardUtil.isValidate(cardNumber)) {
@@ -90,5 +93,25 @@ public class UserCardService {
             }
         }
         return false;
+    }
+
+    public Boolean refill( String cardNumber, Double amount) {
+        if (!CardUtil.isValidate(cardNumber)) {
+            return false;
+        }
+
+        CardDTO cardDTO = cardRepository.getCardByCardNumber(cardNumber);
+        if (cardDTO == null) {
+            return false;
+        }
+
+        if(!cardDTO.getVisible() && !cardDTO.getStatus().equals(GeneralStatus.ACTIVE)) {
+            return false;
+        }
+
+        double newBalance = cardDTO.getBalance() + amount;
+        cardDTO.setBalance(newBalance);
+        cardRepository.updateCardBalance(cardNumber,amount);
+        return transactionService.createTransaction(cardDTO.getId(),amount,null, TransactionType.REFILL);
     }
 }

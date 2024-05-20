@@ -39,6 +39,7 @@ public class UserController {
                     deleteCard();
                     break;
                 case 5:
+                    refill();
                     break;
                 case 6:
                     break;
@@ -46,6 +47,21 @@ public class UserController {
                     loop = false;
                      break;
             }
+        }
+    }
+
+    private void refill() {
+        System.out.println("enter card number : ");
+        String cardNumber = scannerService.getScannerForStr().nextLine();
+
+        System.out.println("enter balance : ");
+        Double amount = scannerService.getScannerForDigit().nextDouble();
+
+        var isRefilled = userCardService.refill(cardNumber,amount);
+        if(isRefilled) {
+            System.out.println("refilled successfully");
+        }else {
+            System.out.println("something went wrong !!!");
         }
     }
 

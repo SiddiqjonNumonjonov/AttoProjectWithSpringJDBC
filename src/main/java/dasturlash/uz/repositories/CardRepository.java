@@ -67,4 +67,14 @@ public class CardRepository {
         var isUpdated = jdbcTemplate.update(sql,cardNumber);
         return isUpdated != 0;
     }
+
+    public Boolean updateCardBalance(String cardNumber, double amount) {
+        String sql = "update card set balance =  balance + ?  where cardNumber = ?";
+        var isUpdated = jdbcTemplate.update(sql,amount,cardNumber);
+        return isUpdated != 0;
+    }
+    public void minusBalance(String cardNumber , Double amount) {
+        String sql = "update card set balance =  balance - ?  where cardNumber = ?";
+        jdbcTemplate.update(sql,amount,cardNumber);
+    }
 }
